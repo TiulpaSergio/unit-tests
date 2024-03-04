@@ -1,0 +1,261 @@
+/* Стилі для меню */
+.header {
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.logo {
+  float: left;
+}
+
+.nav {
+  text-align: center;
+}
+
+.nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0 0; 
+  display: inline-block;
+}
+
+.nav li {
+  display: inline-block;
+  padding: 10px;
+  margin: 0 70px; 
+}
+
+.nav li a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.nav li a:hover {
+  color: #ccc;
+}
+
+/* Стилі для секції реєстрації */
+.register {
+  margin: 50px auto;
+  width: 50%;
+  max-width: 400px;
+  padding: 30px;
+  border: 1px solid #ccc;
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+}
+
+.register h2 {
+  text-align: center;
+}
+
+.register form {
+  margin-top: 20px;
+}
+
+.register label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.register input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+.register button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 10px;
+  background-color: #333;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.register button:hover {
+  background-color: #444;
+}
+
+/* Стилі для футера */
+.footer {
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+#gender {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  appearance: none;
+}
+
+#gender:focus {
+  border-color: #555;
+}
+
+.register textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: vertical;
+}
+
+.posts {
+  position: relative;
+  margin: 150px auto;
+  max-width: 800px;
+}
+
+.post {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  overflow-y: auto;
+  max-height: 400px;
+  margin-top: 115px;
+  clear: both;
+  overflow-y: auto;
+}
+
+.post h2 {
+  margin-top: 0;
+}
+
+.post p {
+  margin-bottom: 10px;
+}
+
+.post-actions {
+  text-align: right;
+}
+
+.post-actions a {
+  margin-left: 10px;
+  color: #333;
+  text-decoration: none;
+}
+
+.post-actions a:hover {
+  color: #555;
+}
+
+.post-author {
+  font-style: italic;
+  margin-bottom: 5px;
+}
+
+.post-view {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.comments {
+  margin-top: 20px;
+}
+
+.comment {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+#new-comment-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+#comment-form {
+  display: flex;
+  flex-direction: column;
+}
+
+#comment-form label {
+  margin-bottom: 5px;
+}
+
+#comment-form input,
+#comment-form textarea,
+#comment-form button {
+  margin-bottom: 10px;
+  padding: 5px;
+  font-size: 16px;
+}
+
+#comment-form button {
+  padding: 10px;
+  background-color: #333;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+#comment-form button:hover {
+  background-color: #444;
+}
+
+.no-posts-message {
+  text-align: center;
+  font-size: 1.5em;
+  font-family: 'YourFont', sans-serif;
+}
+
+/* Стилі для поста */
+.post-container {
+  border: 2px solid black;
+  padding: 10px;
+  margin: 10px 0;
+  cursor: pointer;
+}
+
+.description {
+  margin-bottom: 10px;
+}
+
+.author-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comments-button {
+  background-color: #ff6961;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.post-author {
+  font-size: larger;
+  font-weight: bold;
+  margin-bottom: 10px;
+}

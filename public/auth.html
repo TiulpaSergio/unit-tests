@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Блог - Авторизація</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <h1>Блог</h1>
+      </div>
+      <nav class="nav">
+        <ul>
+          <li><a href="">Головна</a></li>
+          <li><a href="">Створити пост</a></li>
+          <li><a href="">Профіль</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section class="register">
+      <h2>Авторизація</h2>
+      <form id="login-form" method="POST">
+        <label for="username">Ім'я користувача або Email:</label>
+        <input type="text" id="username" name="email" placeholder="Введіть ім'я користувача" required>
+        <label for="password">Пароль:</label>
+        <input type="password" id="password" name="password" placeholder="Введіть пароль" required>
+        <div class="additional-links">
+          <a href="/registration">Реєстрація</a>
+        </div>
+        <button type="submit">Увійти</button>
+      </form>
+      <div id="error-message" style="color: red;"></div>
+    </main>
+    <footer class="footer">
+      <div class="container">
+        <p>Всі права захищені</p>
+      </div>
+    </footer>
+    <script>
+      document.getElementById('login-form').addEventListener('submit', async function (event) {
+        event.preventDefault();
+    
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+    
+        try {
+          const response = await fetch('/authorization', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: username,
+              password: password,
+            }),
+          });
+    
+          const data = await response.json(); 
+    
+          console.log('Received response:', data);
+    
+          if (data.success) {
+            window.location.href = '/';
+          } else {
+            document.getElementById('error-message').innerText = 'Помилка авторизації: ' + data.error;
+          }
+        } catch (error) {
+          console.error('Помилка під час відправлення запиту на сервер:', error);
+        }
+      });
+    </script>    
+</body>
+</html>

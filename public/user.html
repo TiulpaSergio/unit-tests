@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Блог - Редагування профілю</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <h1>Блог</h1>
+      </div>
+      <nav class="nav">
+        <ul>
+          <li><a href="/">Головна</a></li>
+          <li><a href="/new">Створити пост</a></li>
+          <li><a href="/user">Профіль</a></li>
+          <li><a id="logout-link" href="#">Вихід</a></li>
+          <li><span id="current-username"></span></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section class="register">
+      <h2>Редагування профілю</h2>
+      <form id="register-form">
+        <label for="username">Ім'я користувача:</label>
+        <input type="text" id="username" name="username" placeholder="Введіть ім'я користувача" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="Введіть email" required>
+        <label for="birthdate">Дата народження:</label>
+        <input type="date" id="birthdate" name="birthdate">
+        <label for="gender">Стать:</label>
+        <select id="gender" name="gender">
+          <option value="male">Чоловік</option>
+          <option value="female">Жінка</option>
+        </select>
+        <label for="address">Адреса:</label>
+        <input type="text" id="address" name="address">
+        <label for="website">Вебсайт:</label>
+        <input type="text" id="website" name="website">
+        <div class="additional-links">
+          <a href="/newpassword">Скинути пароль</a>
+        </div>
+        <button type="submit">Зберегти</button>
+        <button type="button" onclick="logout()">Вихід</button>
+      </form>
+
+      <div id="error-message"></div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="container">
+      <p>Всі права захищені</p>
+    </div>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const userApiPath = '/api/getCurrentUser';
+
+      try {
+        const response = await fetch(userApiPath, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.user) {
+          window.location.href = '/authorization';
+        } else {
+          const currentUsernameElement = document.getElementById('current-username');
+          currentUsernameElement.textContent = data.user.username;
+
+          document.getElementById('username').value = data.user.username;
+          document.getElementById('email').value = data.user.email;
+          document.getElementById('birthdate').value = data.user.birthdate || '';
+          document.getElementById('gender').value = data.user.gender || 'male';
+          document.getElementById('address').value = data.user.address || '';
+          document.getElementById('website').value = data.user.website || '';
+        }
+      } catch (error) {
+        console.error('Помилка:', error);
+      }
+    });
+
+    document.getElementById('register-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const username = document.getElementById('username').value;
+      const email = document.getElementById('email').value;
+      const birthdate = document.getElementById('birthdate').value;
+      const gender = document.getElementById('gender').value;
+      const address = document.getElementById('address').value;
+      const website = document.getElementById('website').value;
+
+      updateProfile({ username, email, birthdate, gender, address, website });
+    });
+
+    function updateProfile(profileData) {
+      fetch('/api/update-profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(profileData),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Профіль оновлено успішно.');
+          window.location.href = '/';
+        } else {
+          document.getElementById('error-message').textContent = 'Помилка під час оновлення профілю.';
+        }
+      })
+      .catch(error => {
+        console.error('Помилка:', error);
+      });
+    }
+
+    document.getElementById('logout-link').addEventListener('click', async () => {
+      try {
+        const response = await fetch('/api/logout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          window.location.href = '/authorization';
+        } else {
+          console.error('Помилка при виході:', data.message);
+        }
+      } catch (error) {
+        console.error('Помилка при виході:', error);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Блог - Коментарі</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <h1>Блог</h1>
+      </div>
+      <nav class="nav">
+        <ul>
+          <li><a href="/">Головна</a></li>
+          <li><a href="/new">Створити пост</a></li>
+          <li><a href="/user">Профіль</a></li>
+          <li><a id="logout-link" href="#">Вихід</a></li>
+          <li id="current-username"></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main class="comments">
+    <div id="post-container"></div>
+    <div id="comments-container"></div>
+    <div id="new-comment-container">
+      <h2>Додати коментар</h2>
+      <form id="comment-form">
+        <label for="comment-body">Тіло коментаря:</label>
+        <textarea id="comment-body" required></textarea>
+
+        <button type="submit">Додати коментар</button>
+      </form>
+    </div>
+  </main>
+  <footer class="footer">
+    <div class="container">
+      <p>Всі права захищені</p>
+    </div>
+  </footer>
+  <script>
+    let data;
+    let postId;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const userApiPath = '/api/getCurrentUser';
+
+      try {
+        const response = await fetch(userApiPath, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        data = await response.json();
+
+        if (!response.ok || !data.user) {
+          window.location.href = '/authorization';
+        } else {
+          const currentUsernameElement = document.getElementById('current-username');
+          currentUsernameElement.textContent = data.user.username;
+        }
+      } catch (error) {
+        console.error('Помилка:', error);
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      postId = urlParams.get('postId');
+
+      const postContainer = document.getElementById('post-container');
+
+      try {
+        const postResponse = await fetch(`/api/posts/${postId}`);
+        const postData = await postResponse.json();
+
+        console.log('Пост:', postData);
+
+        if (postResponse.ok && postData.success) {
+          const postElement = createPostElement(postData.post);
+          postContainer.appendChild(postElement);
+          loadComments();
+        } else {
+          console.error('Помилка отримання поста:', postData.message || 'Не вдалося отримати пост');
+        }
+      } catch (error) {
+        console.error('Помилка:', error);
+      }
+
+      const commentForm = document.getElementById('comment-form');
+      commentForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const commentBodyInput = document.getElementById('comment-body');
+
+        const newComment = {
+          user: data.user._id,
+          post: postId,
+          text: commentBodyInput.value,
+        };
+
+        try {
+          const addCommentResponse = await fetch(`/api/posts/${postId}/comments`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newComment),
+          });
+
+          const addCommentData = await addCommentResponse.json();
+
+          if (addCommentResponse.ok) {
+            commentBodyInput.value = '';
+            const newCommentElement = createCommentElement(addCommentData.newComment);
+            const commentsContainer = document.getElementById('comments-container');
+            commentsContainer.appendChild(newCommentElement);
+            updateCommentsCount(addCommentData.commentsCount);
+          } else {
+            throw new Error(addCommentData.message || 'Помилка додавання коментаря');
+          }
+        } catch (error) {
+          console.error('Помилка:', error);
+        }
+      });
+
+      async function getComments() {
+        try {
+          const commentsResponse = await fetch(`/api/posts/${postId}/comments`);
+          const commentsData = await commentsResponse.json();
+
+          if (commentsResponse.ok) {
+            return commentsData.comments || [];
+          } else {
+            throw new Error(commentsData.message || 'Помилка отримання коментарів');
+          }
+        } catch (error) {
+          console.error('Помилка:', error);
+          return [];
+        }
+      }
+
+      function createPostElement(post) {
+        const postElement = document.createElement('div');
+        postElement.innerHTML = `
+          <div class="post" id="post-${post._id}">
+            <h2>${post.title}</h2>
+            <p>${post.shortDescription}</p>
+            <p>${post.content}</p>
+            <p class="post-author">Автор: ${post.author}</p>
+          </div>
+          <p>Коментарі: <span id="comments-count-${post._id}">${post.commentsCount}</span></p>
+        `;
+        return postElement;
+      }
+
+      function createCommentElement(comment) {
+        const commentElement = document.createElement('div');
+        commentElement.innerHTML = `
+          <div class="comment">
+            <p class="comment-author">${comment.username}</p>
+            <p class="comment-body">${comment.text}</p>
+          </div>
+        `;
+        return commentElement;
+      }
+
+      
+      async function loadComments() {
+  const commentsContainer = document.getElementById('comments-container');
+  const comments = await getComments();
+
+  console.log('Comments data from server:', comments); 
+
+  if (Array.isArray(comments) && comments.length > 0) {
+    comments.forEach(comment => {
+      const commentElement = createCommentElement(comment);
+      commentsContainer.appendChild(commentElement);
+    });
+  } else {
+    console.log('Масив коментарів порожній або не є масивом:', comments);
+    commentsContainer.innerHTML = '<p class="no-comments-message">На жаль, немає жодного коментаря.</p>';
+  }
+
+  console.log('Comments in client code:', comments);
+}
+
+      function updateCommentsCount(count) {
+        const commentsCountElement = document.getElementById(`comments-count-${postId}`);
+        if (commentsCountElement) {
+          commentsCountElement.textContent = count;
+        }
+      }
+
+      document.getElementById('logout-link').addEventListener('click', async () => {
+        try {
+          const logoutResponse = await fetch('/api/logout', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          const logoutData = await logoutResponse.json();
+
+          if (logoutResponse.ok && logoutData.success) {
+            window.location.href = '/authorization';
+          } else {
+            console.error('Помилка при виході:', logoutData.message || 'Не вдалося вийти з системи');
+          }
+        } catch (error) {
+          console.error('Помилка при виході:', error);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

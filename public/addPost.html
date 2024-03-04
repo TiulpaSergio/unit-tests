@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Блог - Створити пост</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <h1>Блог</h1>
+      </div>
+      <nav class="nav">
+        <ul>
+          <li><a href="/">Головна</a></li>
+          <li><a href="/new">Створити пост</a></li>
+          <li><a href="/user">Профіль</a></li>
+          <li><a id="logout-link" href="#">Вихід</a></li>
+          <li id="current-username"></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section class="register">
+      <h2>Зробити пост</h2>
+      <form id="register-form">
+        <input type="hidden" id="post-id" name="post-id">
+        <label for="title">Назва посту:</label>
+        <input type="text" id="title" name="title" placeholder="Введіть назву посту" required>
+        <label for="shortDescription">Короткий опис:</label>
+        <input type="text" id="shortDescription" name="shortDescription" placeholder="Введіть короткий опис" required>
+        <label for="content">Текст посту:</label>
+        <textarea id="content" name="content" rows="10"></textarea>
+        <button type="submit">Опублікувати</button>
+        <button type="button">Скасувати</button>
+      </form>
+      <div id="error-message"></div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="container">
+      <p>Всі права захищені</p>
+    </div>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const userApiPath = '/api/getCurrentUser';
+
+      try {
+        const response = await fetch(userApiPath, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.user) {
+          window.location.href = '/authorization';
+        } else {
+          const currentUsernameElement = document.getElementById('current-username');
+          currentUsernameElement.textContent = data.user.username;
+        }
+      } catch (error) {
+        console.error('Помилка:', error);
+      }
+
+      const logoutLink = document.getElementById('logout-link');
+      logoutLink.addEventListener('click', logout);
+    });
+
+    document.getElementById('register-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const title = document.getElementById('title').value;
+      const desc = document.getElementById('shortDescription').value;
+      const body = document.getElementById('content').value;
+      const author = document.getElementById('current-username').textContent.trim();
+
+      createPost({ title, desc, body, author });
+    });
+
+    function createPost(postData) {
+      console.log('Sending data to server:', postData);
+
+      fetch('/create-post', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(postData),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Server response:', data);
+
+        if (data.success) {
+          alert('Пост опубліковано успішно.');
+          document.getElementById('register-form').reset();
+          
+          window.location.href = `/`;
+        } else {
+          document.getElementById('error-message').textContent = 'Помилка під час створення посту.';
+        }
+      })
+      .catch(error => {
+        console.error('Помилка при відправці на сервер:', error);
+      });
+    }
+
+    document.getElementById('logout-link').addEventListener('click', async () => {
+      try {
+        const response = await fetch('/api/logout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          window.location.href = '/authorization';
+        } else {
+          console.error('Помилка при виході:', data.message);
+        }
+      } catch (error) {
+        console.error('Помилка при виході:', error);
+      }
+    });
+  </script>
+</body>
+</html>
