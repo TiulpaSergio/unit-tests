@@ -17,7 +17,7 @@
           <li><a href="/">Головна</a></li>
           <li><a href="/new">Створити пост</a></li>
           <li><a href="/user">Профіль</a></li>
-          <li><a id="logout-link" href="#">Вихід</a></li>
+          <li><a id="logout-link" href="#" onclick="logout()">Вихід</a></li>
           <li id="current-username"></li>
         </ul>
       </nav>
@@ -31,92 +31,6 @@
       <p>Всі права захищені</p>
     </div>
   </footer>
-  <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      const userApiPath = '/api/getCurrentUser';
-
-      try {
-        const response = await fetch(userApiPath, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
-        const data = await response.json();
-
-        if (!response.ok || !data.user) {
-          window.location.href = '/authorization';
-        } else {
-          const currentUsernameElement = document.getElementById('current-username');
-          currentUsernameElement.textContent = data.user.username;
-        }
-      } catch (error) {
-        console.error('Помилка:', error);
-      }
-
-      const postsContainer = document.getElementById('posts-container');
-
-      try {
-        const postsResponse = await fetch('/api/posts');
-        const postsData = await postsResponse.json();
-
-        if (postsResponse.ok) {
-          if (Array.isArray(postsData) && postsData.length > 0) {
-            postsData.forEach(post => {
-              const postElement = createPostElement(post);
-              postsContainer.appendChild(postElement);
-            });
-          } else {
-            console.log('Масив постів порожній або не є масивом:', postsData);
-            postsContainer.innerHTML = '<p class="no-posts-message">На жаль, немає жодного поста.</p>';
-          }
-        } else {
-          throw new Error(postsData.message || 'Помилка отримання постів');
-        }
-      } catch (error) {
-        console.error('Помилка:', error);
-      }
-
-      document.getElementById('logout-link').addEventListener('click', async () => {
-        try {
-          const logoutResponse = await fetch('/api/logout', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
-
-          const logoutData = await logoutResponse.json();
-
-          if (logoutResponse.ok && logoutData.success) {
-            window.location.href = '/authorization';
-          } else {
-            console.error('Помилка при виході:', logoutData.message || 'Не вдалося вийти з системи');
-          }
-        } catch (error) {
-          console.error('Помилка при виході:', error);
-        }
-      });
-    });
-
-    function createPostElement(post) {
-      const postElement = document.createElement('div');
-      postElement.innerHTML = `
-        <div class="post" id="post-${post._id}">
-          <h2>${post.title}</h2>
-          <p>${post.shortDescription}</p>
-          <p>Автор: ${post.author}</p>
-          <p>Коментарі: <span id="comments-count-${post._id}">${post.commentsCount}</span></p>
-          <button onclick="openComments('${post._id}')">Переглянути коментарі</button>
-        </div>
-      `;
-      return postElement;
-    }
-
-    function openComments(postId) {
-      window.location.href = `/comments.html?postId=${postId}`;
-    }
-  </script>
+  <script src="viewPost.js"></script>
 </body>
 </html>

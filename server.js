@@ -15,7 +15,7 @@ const User = require('./models/users.js');
 const Post = require('./models/posts.js');
 const Comm = require('./models/comm.js');
 
-mongoose.connect('mongodb+srv://your_username:your_password@cluster0.lwqkvak.mongodb.net/your_database', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb+srv://tyulpaserhey:Sexyboy7734@cluster0.lwqkvak.mongodb.net/', { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 
 app.use(bodyParser.json());
@@ -104,7 +104,12 @@ app.get('/api/posts', async (req, res) => {
   
       await user.save();
   
-      res.json({ success: true });
+      req.login(user, (err) => {
+        if (err) {
+            return next(err);
+        }
+        return res.json({ success: true });
+    });
     } catch (error) {
       res.status(500).json({ success: false, error: error.message });
     }
