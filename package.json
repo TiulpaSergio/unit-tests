@@ -26,5 +26,9 @@
     "regenerator-runtime": "^0.14.1",
     "supertest": "^6.3.4",
     "text-encoding": "^0.7.0"
+  },
+  "scripts": {
+    "test": "jest"
   }
+  
 }
