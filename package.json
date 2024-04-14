@@ -28,7 +28,7 @@
     "text-encoding": "^0.7.0"
   },
   "scripts": {
-    "test12": "jest"
+    "test": "jest"
   }
   
 }
