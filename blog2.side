@@ -1,0 +1,120 @@
+{
+  "id": "0f12f601-a99c-4da8-9bfa-16126a0871e4",
+  "version": "2.0",
+  "name": "blog",
+  "url": "http://localhost:3000",
+  "tests": [{
+    "id": "6904999b-44bb-4b39-9c8c-63163fd769e5",
+    "name": "test",
+    "commands": [{
+      "id": "c90a7b7f-b66e-4c51-a8e7-9bb9a19774b4",
+      "comment": "",
+      "command": "open",
+      "target": "/authorization",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4ef7ad9f-baf7-47a1-94aa-5d84b6c4448f",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1446x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ce73c0a1-b25f-4128-8e6e-71583b9fb7ee",
+      "comment": "",
+      "command": "click",
+      "target": "id=username",
+      "targets": [
+        ["id=username", "id"],
+        ["name=email", "name"],
+        ["css=#username", "css:finder"],
+        ["xpath=//input[@id='username']", "xpath:attributes"],
+        ["xpath=//form[@id='login-form']/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "25b75f12-c732-4e6a-9bc2-0ff245bfeb01",
+      "comment": "",
+      "command": "type",
+      "target": "id=username",
+      "targets": [
+        ["id=username", "id"],
+        ["name=email", "name"],
+        ["css=#username", "css:finder"],
+        ["xpath=//input[@id='username']", "xpath:attributes"],
+        ["xpath=//form[@id='login-form']/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "1@1"
+    }, {
+      "id": "2309ddf3-ab24-4c6f-8a0f-8587ede15118",
+      "comment": "",
+      "command": "click",
+      "target": "id=password",
+      "targets": [
+        ["id=password", "id"],
+        ["name=password", "name"],
+        ["css=#password", "css:finder"],
+        ["xpath=//input[@id='password']", "xpath:attributes"],
+        ["xpath=//form[@id='login-form']/input[2]", "xpath:idRelative"],
+        ["xpath=//input[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "14952c4a-cfbe-4c81-9745-aad26850e125",
+      "comment": "",
+      "command": "type",
+      "target": "id=password",
+      "targets": [
+        ["id=password", "id"],
+        ["name=password", "name"],
+        ["css=#password", "css:finder"],
+        ["xpath=//input[@id='password']", "xpath:attributes"],
+        ["xpath=//form[@id='login-form']/input[2]", "xpath:idRelative"],
+        ["xpath=//input[2]", "xpath:position"]
+      ],
+      "value": "2"
+    }, {
+      "id": "37a43d21-1f16-439e-862b-6f62fcfe71a0",
+      "comment": "",
+      "command": "click",
+      "target": "css=button",
+      "targets": [
+        ["css=button", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//form[@id='login-form']/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Увійти')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "35956421-9cda-47fd-9667-3997cfa0ac46",
+      "comment": "",
+      "command": "click",
+      "target": "id=logout-link",
+      "targets": [
+        ["id=logout-link", "id"],
+        ["linkText=Вихід", "linkText"],
+        ["css=#logout-link", "css:finder"],
+        ["xpath=//a[contains(text(),'Вихід')]", "xpath:link"],
+        ["xpath=//a[@id='logout-link']", "xpath:attributes"],
+        ["xpath=//a[contains(@href, '#')]", "xpath:href"],
+        ["xpath=//li[4]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Вихід')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "0829a970-2b9b-4a4c-99ea-c42fcaef3a77",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["6904999b-44bb-4b39-9c8c-63163fd769e5"]
+  }],
+  "urls": ["http://localhost:3000/"],
+  "plugins": []
+}

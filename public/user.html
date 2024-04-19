@@ -121,6 +121,7 @@
       })
       .catch(error => {
         console.error('Помилка:', error);
+        throw new Error('Помилка оновлення профілю');
       });
     }
 

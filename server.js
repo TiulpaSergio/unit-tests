@@ -1,4 +1,3 @@
-require('text-encoding');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -55,7 +54,7 @@ app.get('/api/posts', async (req, res) => {
     try {
       const { username, email, birthdate, gender, address, website } = req.body;
   
-      const user = await User.findOne({ username });
+      const user = await User.findOne({ email });
   
       if (!user) {
         return res.status(404).json({ success: false, message: 'Користувача не знайдено' });
