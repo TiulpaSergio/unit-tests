@@ -15,6 +15,11 @@
     "@babel/preset-env": "^7.24.4",
     "@eslint/eslintrc": "^3.0.2",
     "@eslint/js": "^9.0.0",
+    "@wdio/cli": "^8.36.1",
+    "@wdio/local-runner": "^8.36.1",
+    "@wdio/mocha-framework": "^8.36.1",
+    "@wdio/spec-reporter": "^8.36.1",
+    "@wdio/visual-service": "^4.1.1",
     "babel-jest": "^29.7.0",
     "chai": "^5.1.0",
     "eslint": "^8.57.0",
@@ -31,6 +36,11 @@
     "node-fetch": "^3.3.2",
     "regenerator-runtime": "^0.14.1",
     "supertest": "^6.3.4",
-    "text-encoding": "^0.7.0"
+    "text-encoding": "^0.7.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  },
+  "scripts": {
+    "wdio": "wdio run ./wdio.conf.ts"
   }
 }
